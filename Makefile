@@ -29,9 +29,9 @@ sim: $(SIM_CPP_DIR)/$(MODULE).cpp $(VERILOG_DIR)/$(MODULE).v
 	@printf "\n$(COLOR_GREEN)===START Simulation with wave===$(COLOR_NONE)\n\n"
 	$(SIM_CC) $(CFLAGS) $(VERILOG_FILE) $(SIM_CPP_FILE)
 	$(OUTPUT_DIR)/$(V_MODULE)
+	gtkwave $(OUTPUT_DIR)/$(MODULE).vcd
 	$(shell git add .)
 	$(shell git commit -m "sim $(MODULE) in RTL")
-	gtkwave $(OUTPUT_DIR)/$(MODULE).vcd
 
 all: verilog sim
 	gtkwave $(WAVE_FILE)
