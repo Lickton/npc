@@ -38,6 +38,7 @@ class IR extends Module {
     })
 
     val inst = Reg(UInt(INST_WIDTH.W))
+    
     val fetcher = Module(new ifetch())
     fetcher.io.addr := io.inst_addr
 
