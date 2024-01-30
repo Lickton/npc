@@ -27,7 +27,7 @@ verilog:
 
 sim: $(SIM_CPP_DIR)/$(MODULE).cpp $(VERILOG_DIR)/$(MODULE).v
 	@printf "\n$(COLOR_GREEN)===START Simulation with wave===$(COLOR_NONE)\n\n"
-	$(SIM_CC) $(CFLAGS) $(VERILOG_FILE) $(SIM_CPP_FILE) -I$(VERILOG_DIR)/ifetch.v
+	$(SIM_CC) $(CFLAGS) $(VERILOG_FILE) $(SIM_CPP_FILE) $(VERILOG_DIR)/ifetch.v
 	$(OUTPUT_DIR)/$(V_MODULE)
 	gtkwave $(OUTPUT_DIR)/$(MODULE).vcd
 	$(shell git add .)
