@@ -1,0 +1,6 @@
+.*
+obj_dir/
+project/
+target/
+vsrc/*
+!.gitignore
