@@ -30,11 +30,14 @@ void freeup();
 
 void cycles(int n)
 {
+    top->io_inst_addr = 0;
     for (int i = 0; i < n; i++) {
+        
         contextp->timeInc(1);
 
         top->clock ^= 1;
-        top->io_inst_addr = i;
+        if (top->clock)
+            top->io_inst_addr ++;
         top->eval();
         // printf("%d \t: %d\n", contextp->time(), top->clock);
         
@@ -72,7 +75,7 @@ void init(int argc, char **argv)
 
 void init_mem()
 {
-    uint32_t opcode = 0x0010011;
+    uint32_t opcode = 0x13;
     uint32_t rd     = 1 << 7;
     uint32_t funct3 = 0;
     uint32_t rs1    = 1 << 14;
