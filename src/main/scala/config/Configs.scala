@@ -3,6 +3,10 @@ package config
 import chisel3._
 
 object Configs {
+    // Register
+    val REGISTER_NUM    = 32
+    val REGISTER_WIDRH  = 5
+
     // Address
     val ADDR_WIDTH      = 32
     val ADDR_BYTE_WIDTH = ADDR_WIDTH / 8
