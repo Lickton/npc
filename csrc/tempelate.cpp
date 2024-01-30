@@ -16,7 +16,7 @@ VerilatedVcdC *tfp;
 
 char Moduel_name[35] = "{MODULE_NAME}";
 
-void init();
+void init(int argc, char **argv);
 void reset(int n);
 void freeup();
 
@@ -35,7 +35,7 @@ void cycles(int n)
 
 int main(int argc, char **argv)
 {
-    init();
+    init(argc, argv);
 
     reset(10);
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void init()
+void init(int argc, char **argv)
 {
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);

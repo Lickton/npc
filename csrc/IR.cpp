@@ -23,7 +23,7 @@ extern "C" void pmem_read(uint32_t paddr, uint32_t *rword) {
     *rword = memory[real_addr];
 }
 
-void init();
+void init(int argc, char **argv);
 void init_mem();
 void reset(int n);
 void freeup();
@@ -44,7 +44,7 @@ void cycles(int n)
 
 int main(int argc, char **argv)
 {
-    init();
+    init(argc, argv);
     init_mem();
 
     reset(10);
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void init()
+void init(int argc, char **argv)
 {
     contextp = new VerilatedContext;
     contextp->commandArgs(argc, argv);
