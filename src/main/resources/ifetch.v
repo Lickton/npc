@@ -1,6 +1,6 @@
 import "DPI-C" function void pmem_read(input int paddr, output int rword);
 
-module instruction_fetch (
+module ifetch (
     input           clk,
     input           rst,
     input  [31:0]   addr,
