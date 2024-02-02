@@ -44,6 +44,7 @@ void cycles(int n)
 int main(int argc, char **argv)
 {
     init(argc, argv);
+    init_mem();
 
     reset(5);
 
@@ -70,7 +71,7 @@ void init(int argc, char **argv)
 
 void init_mem()
 {
-    for (int i = 1; i < 1000; i++) {
+    for (int i = 0; i < 1000; i++) {
         memory[i] = 0x00108093;
     }
 }
