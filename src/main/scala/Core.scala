@@ -10,6 +10,7 @@ class Core extends Module {
     val io = IO(new Bundle {
         val imem = new RomIO
         val out = Output(UInt(Configs.DATA_WIDTH.W))
+        val break = Output(Bool())
     })
 
     val fetch = Module(new InstFetch)
@@ -17,6 +18,7 @@ class Core extends Module {
 
     val decode = Module(new Decode)
     decode.io.inst := fetch.io.inst
+    io.break := decode.io.break
 
     val rf = Module(new RegFile)
     rf.io.rs1_addr := decode.io.rs1_addr

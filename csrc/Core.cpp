@@ -23,18 +23,21 @@ void init_mem();
 void reset(int n);
 void freeup();
 
-void cycles(int n)
+void cycles()
 {
-    for (int i = 0; i < n; i++) {
+    while (1) {
         contextp->timeInc(1);
 
         top->clock ^= 1;
-        printf("en:%d raddr:%u\n", top->io_imem_ren, top->io_imem_raddr);
+        // printf("en:%d raddr:%u\n", top->io_imem_ren, top->io_imem_raddr);
         uint32_t read_addr = (top->io_imem_raddr & 0x7fffffff) / 4;
         top->io_imem_rdata = memory[read_addr];
         top->eval();
         // printf("%d \t: %d\n", contextp->time(), top->clock);
-        
+        if (top->break) {
+            printf("ebreak simulation end\n");
+            break;
+        }
         tfp->dump(contextp->time());
     }
 }
@@ -46,7 +49,7 @@ int main(int argc, char **argv)
 
     reset(10);
 
-    cycles(1000);
+    cycles();
 
     freeup();
 
@@ -69,9 +72,11 @@ void init(int argc, char **argv)
 
 void init_mem()
 {
-    for (int i = 0; i < 1000; i++) {
+    int i;
+    for (i = 0; i < 1000; i++) {
         memory[i] = 0x00108093;
     }
+    memory[i] = 0x00100073;
 }
 
 void reset(int n)

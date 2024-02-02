@@ -17,6 +17,9 @@ class Decode extends Module {
         val rd_addr = Output(UInt(Configs.REG_WIDRH.W))
         val func = Output(UInt(3.W))
         val imm = Output(UInt(Configs.DATA_WIDTH.W))
+
+        // for simulation
+        val break = Output(Bool())
     })
 
     val inst = io.inst
@@ -38,12 +41,17 @@ class Decode extends Module {
     io.rs2_en := false.B
     io.rd_en  := false.B
 
+    // for simulation
+    io.break := false.B
+
     when (inst === Instructions.addi) {
         io.rs1_en := true.B
         io.rs2_en := false.B
         io.rd_en  := true.B
         imm := immI
         func := Func.ADD.asUInt
+    }.elsewhen (inst === Instructions.ebreak) {
+        io.break := true.B
     }
 
     io.func := func
