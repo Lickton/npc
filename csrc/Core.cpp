@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     init(argc, argv);
     init_mem();
 
-    reset(5);
+    reset(10);
 
     cycles(1000);
 

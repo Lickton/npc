@@ -23,7 +23,7 @@ class InstFetch extends Module {
     pc_en := true.B
 
     val pc = RegInit(Configs.START_ADDR.U(32.W))
-
+    
     pc := Mux(reset.asBool, Configs.START_ADDR.U, pc + Configs.INST_BYTE_WIDTH.U)
 
     io.imem.ren := true.B
