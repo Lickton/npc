@@ -36,7 +36,7 @@ void cycles()
         // printf("%d \t: %d\n", contextp->time(), top->clock);
         tfp->dump(contextp->time());
         if (top->io_break) {
-            printf("\n\033[32m ebreak simulation end\033[0m\n\n");
+            printf("\n\033[32m===ebreak simulation end\033[0m===\n\n");
             break;
         }
     }
