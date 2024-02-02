@@ -29,9 +29,7 @@ void cycles(int n)
         contextp->timeInc(1);
 
         top->clock ^= 1;
-        if (!top->io_imem_ren) {
-            break;
-        }
+        printf("en:%d raddr:%u\n", top->io_imem_ren, top->io_imem_raddr);
         uint32_t read_addr = (top->io_imem_raddr & 0x7fffffff) / 4;
         top->io_imem_rdata = memory[read_addr];
         top->eval();
