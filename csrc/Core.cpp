@@ -34,11 +34,11 @@ void cycles()
         top->io_imem_rdata = memory[read_addr];
         top->eval();
         // printf("%d \t: %d\n", contextp->time(), top->clock);
+        tfp->dump(contextp->time());
         if (top->io_break) {
             printf("ebreak simulation end\n");
             break;
         }
-        tfp->dump(contextp->time());
     }
 }
 
