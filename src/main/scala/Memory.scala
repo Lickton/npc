@@ -13,6 +13,6 @@ class RomIO extends Bundle {
      *  - rdata : read data from simulation environment
      **/
     val ren = Output(Bool())
-    val raddr = Output(Bool())
+    val raddr = Output(UInt(ADDR_WIDTH.W))
     val rdata = Input(UInt(DATA_WIDTH.W))
 }
