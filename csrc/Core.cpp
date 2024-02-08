@@ -36,7 +36,7 @@ extern "C" void write_dmem(uint32_t addr, uint32_t wmask, uint32_t wdata) {
 
 
 void init(int argc, char **argv);
-void load_img(char *filename);
+long load_img(char *filename);
 void reset(int n);
 void freeup();
 
@@ -63,8 +63,12 @@ int main(int argc, char **argv)
         printf("%s:%d> arg with file name!\n", __FILE__, __LINE__);
         return 0;
     }
-    printf("argv[1] = %s\n", argv[1]);
-    load_img(argv[1]);
+    // printf("argv[1] = %s\n", argv[1]);
+    int size = load_img(argv[1]);
+    if (size > 4096) {
+        printf("File too big\n");
+        return 0;
+    }
 
     reset(5);
 
