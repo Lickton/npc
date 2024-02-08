@@ -45,7 +45,7 @@ void freeup();
 void cycles()
 {
     // while (1) {
-    for (int i = 0; i < 13; i++) {
+    for (int i = 0; i < 20; i++) {
         contextp->timeInc(1);
 
         top->clock ^= 1;
