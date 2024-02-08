@@ -11,7 +11,7 @@ module ram_2r1w (
     // input [31:0]dmem_waddr,
     // input [31:0]dmem_wmask,
     // input [31:0]dmem_wdata,
-);
+)
     
     import "DPI-C" function int  read_imem(input int addr);
     // import "DPI-C" function int  read_dmem(input int addr);
