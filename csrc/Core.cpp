@@ -16,8 +16,8 @@ VerilatedContext *contextp;
 VerilatedVcdC *tfp;
 
 char Moduel_name[35] = "Core";
-uint32_t inst_memory[6000];
-uint32_t data_memory[6000];
+uint32_t inst_memory[3000];
+uint32_t data_memory[3000];
 
 extern "C" int  read_imem(uint32_t addr) {
     uint32_t _addr = (addr & 0x7fffffff) >> 2;
@@ -104,6 +104,8 @@ long load_img(char *img_file)
     fseek(fp, 0, SEEK_SET);
     fread(inst_memory, size, 1, fp);
     fclose(fp);
+
+    for (int i = 0; i < )
 
     return size;
 }
