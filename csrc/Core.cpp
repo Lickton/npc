@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     }
     // printf("argv[1] = %s\n", argv[1]);
     int size = load_img(argv[1]);
-    if (size > 4096) {
+    if (size > 6000) {
         printf("File too big\n");
         return 0;
     }
