@@ -46,9 +46,6 @@ void cycles()
         contextp->timeInc(1);
 
         top->clock ^= 1;
-        // printf("en:%d raddr:%u\n", top->io_imem_ren, top->io_imem_raddr);
-        uint32_t read_addr = (top->io_imem_raddr & 0x7fffffff) / 4;
-        top->io_imem_rdata = memory[read_addr];
         top->eval();
         // printf("%d \t: %d\n", contextp->time(), top->clock);
         tfp->dump(contextp->time());
@@ -103,7 +100,7 @@ long load_img(char *img_file)
     fseek(fp, 0, SEEK_SET);
     fread(inst_memory, size, 1, fp);
     fclose(fp);
-    
+
     return size;
 }
 
