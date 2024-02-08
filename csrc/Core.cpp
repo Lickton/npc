@@ -11,6 +11,8 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
+#define BASE_MEM 0x1000
+
 VCore *top;
 VerilatedContext *contextp;
 VerilatedVcdC *tfp;
@@ -20,17 +22,17 @@ uint32_t inst_memory[3000];
 uint32_t data_memory[3000];
 
 extern "C" int  read_imem(uint32_t addr) {
-    uint32_t _addr = (addr & 0x7fffffff) >> 2;
+    uint32_t _addr = ((addr & 0x7fffffff) + BASE_MEM) >> 2;
     return inst_memory[_addr];
 }
 
 extern "C" int  read_dmem(uint32_t addr) {
-    uint32_t _addr = (addr & 0x7fffffff) >> 2;
+    uint32_t _addr = ((addr & 0x7fffffff) + BASE_MEM) >> 2;
     return data_memory[_addr];
 }
 
 extern "C" void write_dmem(uint32_t addr, uint32_t wmask, uint32_t wdata) {
-    uint32_t _addr = (addr & 0x7fffffff) >> 2;
+    uint32_t _addr = ((addr & 0x7fffffff) + BASE_MEM) >> 2;
     data_memory[_addr] = wdata & wmask;
 }
 
@@ -42,7 +44,8 @@ void freeup();
 
 void cycles()
 {
-    while (1) {
+    // while (1) {
+    for (int i = 0; i < 13; i++)
         contextp->timeInc(1);
 
         top->clock ^= 1;
