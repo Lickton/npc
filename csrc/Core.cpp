@@ -21,12 +21,13 @@ char Moduel_name[35] = "Core";
 uint32_t inst_memory[3000];
 uint32_t data_memory[3000];
 
-extern "C" int  read_imem(uint32_t addr) {
+extern "C" int  read_imem(bool ren, uint32_t addr) {
+    if (!ren) return 0;
     uint32_t _addr = ((addr & 0x7fffffff) + BASE_MEM) >> 2;
     return inst_memory[_addr];
 }
 
-extern "C" int  read_dmem(uint32_t addr) {
+extern "C" int  read_dmem(bool ren, uint32_t addr) {
     uint32_t _addr = ((addr & 0x7fffffff) + BASE_MEM) >> 2;
     return data_memory[_addr];
 }
@@ -73,7 +74,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    reset(5);
+    reset(3);
 
     cycles();
 

@@ -28,6 +28,6 @@ class InstFetch extends Module {
     io.imem.ren := true.B
     io.imem.raddr := pc
 
-    io.pc := Mux(pc_en, pc, 0.U)
-    io.inst := Mux(pc_en, io.imem.rdata, 0.U)
+    io.pc := pc 
+    io.inst := io.imem.rdata
 }
