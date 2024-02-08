@@ -63,7 +63,7 @@ int main(int argc, char **argv)
         printf("%s:%d> arg with file name!\n", __FILE__, __LINE__);
         return 0;
     }
-
+    printf("argv[1] = %s\n", argv[1]);
     load_img(argv[1]);
 
     reset(5);
