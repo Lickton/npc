@@ -16,8 +16,8 @@ VerilatedContext *contextp;
 VerilatedVcdC *tfp;
 
 char Moduel_name[35] = "Core";
-uint32_t inst_memory[4096];
-uint32_t data_memory[4096];
+uint32_t inst_memory[6000];
+uint32_t data_memory[6000];
 
 extern "C" int  read_imem(uint32_t addr) {
     uint32_t _addr = (addr & 0x7fffffff) >> 2;
