@@ -105,7 +105,9 @@ long load_img(char *img_file)
     fread(inst_memory, size, 1, fp);
     fclose(fp);
 
-    for (int i = 0; i < )
+    for (int i = 0; i < 1500; i++) {
+        printf("%u\n", inst_memory[i]);
+    }
 
     return size;
 }
