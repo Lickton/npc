@@ -106,7 +106,7 @@ long load_img(char *img_file)
     fclose(fp);
 
     for (int i = 0; i < 1500; i++) {
-        printf("%u\n", inst_memory[i]);
+        printf("0x%08x > %u\n", (i * 4) + 0x80000000, inst_memory[i]);
     }
 
     return size;
