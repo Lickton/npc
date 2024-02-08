@@ -28,14 +28,11 @@ verilog:
 sim: $(SIM_CPP_DIR)/$(MODULE).cpp $(VERILOG_DIR)/$(MODULE).v
 	@printf "\n$(COLOR_GREEN)===START Simulation with wave===$(COLOR_NONE)\n\n"
 	$(SIM_CC) $(CFLAGS) $(VERILOG_FILE) $(SIM_CPP_FILE) -I$(VERILOG_DIR)
-	$(OUTPUT_DIR)/$(V_MODULE)
+	$(OUTPUT_DIR)/$(V_MODULE) dummy-riscv32e-npc.elf
 	gtkwave $(OUTPUT_DIR)/$(MODULE).vcd
-	$(shell git add .)
-	$(shell git commit -m "sim $(MODULE) in RTL")
+	# $(shell git add .)
+	# $(shell git commit -m "sim $(MODULE) in RTL")
 	@printf "\n$(COLOR_GREEN)===END Simulation===$(COLOR_NONE)\n\n"
-	
-all: verilog sim
-	gtkwave $(WAVE_FILE)
 
 clean:
 	@rm -f $(VERILOG_DIR)/*

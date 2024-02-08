@@ -11,7 +11,7 @@ object Configs {
     val ADDR_WIDTH      = 32
     val ADDR_BYTE_WIDTH = ADDR_WIDTH / 8
 
-    // Date
+    // Data
     val DATA_WIDTH      = 32
     val DATA_WIDTH_H    = 16
     val DATA_WIDTH_B    = 8
@@ -20,8 +20,12 @@ object Configs {
     val INST_WIDTH      = 32
     val INST_BYTE_WIDTH = INST_WIDTH / 8
 
-    // program
+    // Program
     val START_ADDR      = "h80000000"
+
+    // Memory
+    val MEM_BIT_SIZE    = 32L * 1024L
+    val MEM_BYTE_SIZE   = MEM_BIT_SIZE / 8
 }
 
 // object Opcode extends ChiselEnum {

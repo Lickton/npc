@@ -16,10 +16,27 @@ VerilatedContext *contextp;
 VerilatedVcdC *tfp;
 
 char Moduel_name[35] = "Core";
-uint32_t memory[1024];
+uint32_t inst_memory[4096];
+uint32_t data_memory[4096];
+
+extern "C" int  read_imem(uint32_t addr) {
+    uint32_t _addr = (addr & 0x7fffffff) >> 2;
+    return inst_memory[_addr];
+}
+
+extern "C" int  read_dmem(uint32_t addr) {
+    uint32_t _addr = (addr & 0x7fffffff) >> 2;
+    return data_memory[_addr];
+}
+
+extern "C" void write_dmem(uint32_t addr, uint32_t wmask, uint32_t wdata) {
+    uint32_t _addr = (addr & 0x7fffffff) >> 2;
+    data_memory[_addr] = wdata & wmask;
+}
+
 
 void init(int argc, char **argv);
-void init_mem();
+void load_img(char *filename);
 void reset(int n);
 void freeup();
 
@@ -45,9 +62,14 @@ void cycles()
 int main(int argc, char **argv)
 {
     init(argc, argv);
-    init_mem();
+    if (argc != 2) {
+        printf("%s:%d> arg with file name!\n", __FILE__, __LINE__);
+        return 0;
+    }
 
-    reset(10);
+    load_img(argv[1]);
+
+    reset(5);
 
     cycles();
 
@@ -70,13 +92,19 @@ void init(int argc, char **argv)
     tfp->open(wave_name);
 }
 
-void init_mem()
+long load_img(char *img_file)
 {
-    int i;
-    for (i = 0; i < 1000; i++) {
-        memory[i] = 0x00108093;
-    }
-    memory[i] = 0x00100073;
+    FILE *fp = fopen(img_file, "rb");
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
+
+    printf("%s:%d> Image %s, size = %ld\n", __FILE__, __LINE__, img_file, size);
+
+    fseek(fp, 0, SEEK_SET);
+    fread(inst_memory, size, 1, fp);
+    fclose(fp);
+    
+    return size;
 }
 
 void reset(int n)

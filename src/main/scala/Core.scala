@@ -8,13 +8,15 @@ import config._
 
 class Core extends Module {
     val io = IO(new Bundle {
-        val imem = new RomIO
+        // val imem = new RomIO
         val out = Output(UInt(Configs.DATA_WIDTH.W))
         val break = Output(Bool())
     })
 
+    val ram = Module(new Ram_2r1w)
     val fetch = Module(new InstFetch)
-    fetch.io.imem <> io.imem
+    // fetch.io.imem <> io.imem
+    ram.io.imem <> fetch.io.imem
 
     val decode = Module(new Decode)
     decode.io.inst := fetch.io.inst
