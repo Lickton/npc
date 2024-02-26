@@ -1,42 +1,39 @@
-MODULE = $(basename $(notdir $(shell find csrc/. -name ".cpp")))
+TOP ?= SimTop
+BUILD_DIR = ./build
 
-COLOR_RED   = \033[31m
-COLOR_GREEN = \033[32m
-COLOR_NONE  = \033[0m
+VERILATOR := $(shell which verilator)
+CXX = $(shell which g++)
+SCALA := $(shell which sbt)
 
-VERILOG_DIR  = $(NPC_HOME)/vsrc
-SIM_CPP_DIR  = $(NPC_HOME)/csrc
-OUTPUT_DIR   = $(NPC_HOME)/obj_dir
+VERILATOR_FLAGS = --cc --trace --build -Mdir $(BUILD_DIR)/verilator
 
-V_MODULE      = $(addprefix V, $(MODULE))
+include filelist.mk
 
-VERILOG_FILE = $(NPC_HOME)/vsrc/$(MODULE).v
-SIM_CPP_FILE = $(NPC_HOME)/csrc/$(MODULE).cpp
+LIB_OBJ := $(patsubst %.cpp,build/object/%.o,$(notdir $(LIB_CPP)))
 
-SIM_CC = verilator
-SCALA_CC = sbt
+all: verilog lib build
 
-CFLAGS = --cc
-CFLAGS += --trace
-CFLAGS += --exe
-CFLAGS += --build
-CFLAGS += -j 4
+run:
+	./$(BUILD_DIR)/$(TOP) $(NPCFLAGS)
+
+build:
+	$(CXX) $(CPP_FILES) $(LIB_STATIC) $(CFLAGS) -o $(BUILD_DIR)/$(TOP)
+
+lib: $(LIB_OBJ)
+	verilator $(VSRC) $(VERILATOR_FLAGS)
+	ar rsc $(LIB_STATIC) $(LIB_OBJ)
+
+build/object/%.o: /usr/share/verilator/include/%.cpp
+	@$(info Target: $@)
+	$(CXX) -c $< -o $@ $(CFLAGS)
 
 verilog:
-	$(SCALA_CC) run
-
-sim: $(SIM_CPP_DIR)/$(MODULE).cpp $(VERILOG_DIR)/$(MODULE).v
-	@printf "\n$(COLOR_GREEN)===START Simulation with wave===$(COLOR_NONE)\n\n"
-	$(SIM_CC) $(CFLAGS) $(VERILOG_FILE) $(SIM_CPP_FILE) -I$(VERILOG_DIR)
-	$(OUTPUT_DIR)/$(V_MODULE) dummy-riscv32e-npc.elf
-	gtkwave $(OUTPUT_DIR)/$(MODULE).vcd
-# $(shell git add .)
-# $(shell git commit -m "sim $(MODULE) in RTL")
-	@printf "\n$(COLOR_GREEN)===END Simulation===$(COLOR_NONE)\n\n"
+	@mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/object
+	sbt run
 
 clean:
-	@rm -f $(VERILOG_DIR)/*
-	@rm -rf $(OUTPUT_DIR)
+	-rm -rf $(BUILD_DIR)
+	-rm *.vcd
 
-clean_test:
-	@rm -rf test_run_dir
+.PHONY: verilog lib build clean
