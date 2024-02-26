@@ -1,33 +1,36 @@
-package npc
-
 import chisel3._
 import chisel3.util._
-import chisel3.stage.ChiselStage
 
-import config._
+import Control._
 
-class InstFetch extends Module {
+class InstFetch(width : Int) extends Module {
     val io = IO(new Bundle {
-        /*
-         * Program Counter I/O
-         *  - imem  : instruction memory IO
-         *  - pc    : current instruction address
-         *  - inst  : instruction fetch from imem
-         **/
-        val imem = new RomIO
-        val pc   = Output(UInt(Configs.ADDR_WIDTH.W))
-        val inst = Output(UInt(Configs.INST_WIDTH.W))
+        val imem = new RomIO(width)
+        val pc   = Output(UInt(width.W))
+        val inst = Output(UInt(width.W))
+        // decode
+        val pc_sel = Input(UInt(2.W))
+        // alu
+        val calc_out = Input(UInt(width.W))
+        val comp_out = Input(Bool())
     })
 
-    val pc_en = RegInit(false.B)
-    pc_en := true.B
+    val pc = RegInit("h80000000".U(32.W))
+    val dnpc = io.calc_out
+    val snpc = pc + 4.U
+    
+    pc := MuxLookup(io.pc_sel, 0.U) (
+        Seq (
+            PC_4  -> (snpc),
+            PC_UC -> (dnpc),
+            PC_RE -> (dnpc),
+            PC_BR -> (Mux(io.comp_out, dnpc, snpc))
+        )
+    )
 
-    val pc = RegInit(Configs.START_ADDR.U(32.W))
-    pc := pc + Configs.INST_BYTE_WIDTH.U
-
-    io.imem.ren := true.B
+    io.imem.ren  := true.B
     io.imem.raddr := pc
 
-    io.pc := pc 
+    io.pc := pc
     io.inst := io.imem.rdata
 }
