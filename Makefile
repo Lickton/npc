@@ -5,7 +5,8 @@ VERILATOR := $(shell which verilator)
 CXX = $(shell which g++)
 SCALA := $(shell which sbt)
 
-VERILATOR_FLAGS = --cc --trace --build -Mdir $(BUILD_DIR)/verilator
+#VERILATOR_FLAGS = --cc --trace --build -Mdir $(BUILD_DIR)/verilator
+VERILATOR_FLAGS = --cc --build -Mdir $(BUILD_DIR)/verilator
 
 include filelist.mk
 
@@ -34,6 +35,6 @@ verilog:
 
 clean:
 	-rm -rf $(BUILD_DIR)
-	-rm *.vcd
+	-rm -f *.vcd
 
 .PHONY: verilog lib build clean

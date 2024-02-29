@@ -7,10 +7,12 @@ paddr_t host_to_guest(uint8_t* haddr) { return haddr - pmem + CONFIG_MBASE; }
 
 static word_t pmem_read(paddr_t addr, uint32_t mask) {
     word_t ret = host_read(guest_to_host(addr), mask);
+    // printf("Read  memory addr %08x, %08x\n", addr, ret);
     return ret;
 }
 
 static void pmem_write(paddr_t addr, uint32_t mask, word_t data) {
+    // printf("Write memory addr %08x, %08x\n", addr, data & mask);
     host_write(guest_to_host(addr), mask, data);
 }
 

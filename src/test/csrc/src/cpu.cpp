@@ -7,7 +7,7 @@
 
 VSimTop* top;
 VerilatedContext* contextp;
-VerilatedVcdC* tfp;
+// VerilatedVcdC* tfp;
 
 static bool print_step = false;
 static uint64_t timer = 0; // us
@@ -27,10 +27,10 @@ void init_verilator(int argc, char **argv) {
     contextp->commandArgs(argc, argv);
     top = new VSimTop{contextp};
 
-    Verilated::traceEverOn(true);
-    tfp = new VerilatedVcdC;
-    top->trace(tfp, 99);
-    tfp->open("SimTop.vcd");
+    // Verilated::traceEverOn(true);
+    // tfp = new VerilatedVcdC;
+    // top->trace(tfp, 99);
+    // tfp->open("SimTop.vcd");
     reset();
 }
 
@@ -46,15 +46,14 @@ void exec_once() {
     contextp->timeInc(1);
     top->clock ^= 1;
     top->eval();
-    tfp->dump(contextp->time());
+    // tfp->dump(contextp->time());
 
     if (print_step) {
         printf("PC %08x %08x\n", top->io_pc, top->io_inst);
     }
 
-    // npc_state.halt_ret = top->rootp->SimTop__DOT__core__DOT__rf__DOT__rf_10;
-
     if (top->io_break) {
+        npc_state.halt_ret = top->rootp->SimTop__DOT__core__DOT__rf__DOT__rf_10;
         npc_state.state = NPC_END;
         npc_state.halt_pc = top->io_pc;
         return;
@@ -64,7 +63,7 @@ void exec_once() {
     contextp->timeInc(1);
     top->clock ^= 1;
     top->eval();
-    tfp->dump(contextp->time());
+    // tfp->dump(contextp->time());
 }
 
 static void execute(uint64_t n) {
@@ -84,13 +83,11 @@ void cpu_exec(uint64_t n) {
     uint64_t timer_end = get_time();
     timer += timer_end - timer_start;
 
-    Log("a0 = %d", npc_state.halt_ret);
-
     if (npc_state.state == NPC_END) {
         if (npc_state.halt_ret == 0) {
-            Log("npc: %s at pc = %08x", ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN), npc_state.halt_pc);
+            Log("NPC: %s at pc = %08x", ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN), npc_state.halt_pc);
         } else {
-            Log("npc: %s at pc = %08x", ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED), npc_state.halt_pc);
+            Log("NPC: %s at pc = %08x", ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED), npc_state.halt_pc);
         }
         statistic();
     }
@@ -99,5 +96,5 @@ void cpu_exec(uint64_t n) {
 void end_verilator() {
     delete top;
     delete contextp;
-    tfp->close();
+    // tfp->close();
 }

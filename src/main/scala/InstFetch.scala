@@ -23,7 +23,6 @@ class InstFetch(width : Int) extends Module {
         Seq (
             PC_4  -> (snpc),
             PC_UC -> (dnpc),
-            PC_RE -> (dnpc),
             PC_BR -> (Mux(io.comp_out, dnpc, snpc))
         )
     )

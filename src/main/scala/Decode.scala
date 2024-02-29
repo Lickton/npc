@@ -9,7 +9,6 @@ object Control {
     // PC select
     val PC_4  = 0.U(2.W) // normal + 4
     val PC_UC = 1.U(2.W) // from ALU calc_out and PC value to rd
-    val PC_RE = 2.U(2.W) // jalr 
     val PC_BR = 3.U(2.W) // from ALU calc_out and comp_out
 
     // in1 select
@@ -99,7 +98,7 @@ class Decode (width : Int) extends Module {
         lui   -> List(PC_4 , A_XXX, B_IMM, immU, ALU_ADD, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         auipc -> List(PC_4 , A_PC , B_IMM, immU, ALU_ADD, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         jal   -> List(PC_UC, A_PC , B_IMM, immJ, ALU_ADD, BR_XXX, ST_XXX, LD_XXX, WB_PC , Y, N),
-        jalr  -> List(PC_RE, A_REG, B_IMM, immI, ALU_ADD, BR_XXX, ST_XXX, LD_XXX, WB_PC , Y, N),
+        jalr  -> List(PC_UC, A_REG, B_IMM, immI, ALU_ADD, BR_XXX, ST_XXX, LD_XXX, WB_PC , Y, N),
         beq   -> List(PC_BR, A_REG, B_REG, immB, ALU_XXX, BR_EQ , ST_XXX, LD_XXX, WB_PC , Y, N),
         bne   -> List(PC_BR, A_REG, B_REG, immB, ALU_XXX, BR_NE , ST_XXX, LD_XXX, WB_PC , Y, N),
         blt   -> List(PC_BR, A_REG, B_REG, immB, ALU_XXX, BR_LT , ST_XXX, LD_XXX, WB_PC , Y, N),
