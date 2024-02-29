@@ -82,7 +82,6 @@ class Decode (width : Int) extends Module {
     val immB = Cat(Fill(20, inst(31)), inst(7), inst(30, 25), inst(11, 8), 0.U(1.W))
     val immU = Cat(inst(31, 12), Fill(12, 0.U))
     val immJ = Cat(Fill(12, inst(31)), inst(31), inst(19, 12), inst(20), inst(30, 21), 0.U(1.W))
-    val immSHMT = Cat(Fill(27, 0.U), inst(24, 20))
 
     io.rs1_addr := inst(19, 15)
     io.rs2_addr := inst(24, 20)
@@ -118,9 +117,9 @@ class Decode (width : Int) extends Module {
         sltiu -> List(PC_4 , A_REG, B_IMM, immI, ALU_SLTU, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         xori  -> List(PC_4 , A_REG, B_IMM, immI, ALU_XOR, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         andi  -> List(PC_4 , A_REG, B_IMM, immI, ALU_AND, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
-        slli  -> List(PC_4 , A_REG, B_IMM, immSHMT, ALU_SLL, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
-        srli  -> List(PC_4 , A_REG, B_IMM, immSHMT, ALU_SRL, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
-        srai  -> List(PC_4 , A_REG, B_IMM, immSHMT, ALU_SRA, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
+        slli  -> List(PC_4 , A_REG, B_IMM, immI, ALU_SLL, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
+        srli  -> List(PC_4 , A_REG, B_IMM, immI, ALU_SRL, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
+        srai  -> List(PC_4 , A_REG, B_IMM, immI, ALU_SRA, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         add   -> List(PC_4 , A_REG, B_REG, 0.U , ALU_ADD, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         sub   -> List(PC_4 , A_REG, B_REG, 0.U , ALU_SUB, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),
         sll   -> List(PC_4 , A_REG, B_REG, 0.U , ALU_SLL, BR_XXX, ST_XXX, LD_XXX, WB_REG, Y, N),

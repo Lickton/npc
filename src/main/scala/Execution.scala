@@ -39,7 +39,7 @@ class Execution (width : Int) extends Module {
         Seq (
             ALU_ADD -> (in1 + in2),
             ALU_SUB -> (in1 - in2),
-            ALU_SRA -> (in1.asSInt >> in2(4, 0)).asUInt,
+            ALU_SRA -> (in1.asSInt >> shamt).asUInt,
             ALU_SRL -> (in1 >> shamt),
             ALU_SLL -> (in1 << shamt),
             ALU_SLT -> (in1.asSInt < in2.asSInt).asUInt,
