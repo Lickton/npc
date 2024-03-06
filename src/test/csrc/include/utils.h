@@ -3,11 +3,11 @@
 
 #include <common.h>
 
-// ----------- timer -----------
+/*----- Timmer ------*/
 
 uint64_t get_time();
 
-// ----------- state -----------
+/*----- State -----*/
 
 enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
@@ -19,7 +19,7 @@ typedef struct {
 
 extern NPCState npc_state;
 
-// ----------- log -----------
+/*----- Log ------*/
 
 #define ANSI_FG_BLACK   "\33[1;30m"
 #define ANSI_FG_RED     "\33[1;31m"

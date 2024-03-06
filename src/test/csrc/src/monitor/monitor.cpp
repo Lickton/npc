@@ -6,7 +6,7 @@ void init_sdb();
 
 static void welcome() {
     Log("Build time: %s, %s", __TIME__, __DATE__);
-    printf("Welcome to npc\n");
+    printf("Welcome to %s-NPC\n", ANSI_FMT("RV32E", ANSI_FG_YELLOW ANSI_BG_RED));
 }
 
 static char *img_file = NULL;

@@ -23,4 +23,5 @@ CPP_FILES = $(CSRC_DIR)/main.cpp \
 			$(CSRC_DIR)/src/utils/timer.cpp \
 			$(CSRC_DIR)/src/utils/state.cpp \
 			$(CSRC_DIR)/src/cpu.cpp \
-			$(CSRC_DIR)/src/memory.cpp
+			$(CSRC_DIR)/src/memory.cpp \
+			$(CSRC_DIR)/src/reg.cpp

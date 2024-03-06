@@ -10,10 +10,6 @@ typedef struct {
     word_t pc;
 } CPU_STATE;
 
-/* copy verilator register file to host register, do this when exec_once */
-void reg_v2c();
-
-// difftest
-
+void reg_display();
 
 #endif
