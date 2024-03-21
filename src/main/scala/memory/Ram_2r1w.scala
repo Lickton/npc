@@ -1,20 +1,11 @@
+package memory
+
 import chisel3._
 import chisel3.util._
 import chisel3.experimental._
 import chisel3.util.HasBlackBoxResource
 
-class RomIO (width : Int) extends Bundle {
-    val ren = Output(Bool())
-    val raddr = Output(UInt(width.W))
-    val rdata = Input(UInt(width.W))
-}
-
-class RamIO (width : Int) extends RomIO (width) {
-    val wen   = Output(Bool())
-    val waddr = Output(UInt(width.W))
-    val wdata = Output(UInt(width.W))
-    val wmask = Output(UInt(width.W))
-}
+import interface._
 
 class ram_2r1w (width : Int) extends BlackBox with HasBlackBoxResource {
     val io = IO(new Bundle {
