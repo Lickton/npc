@@ -10,13 +10,15 @@ import Control._
 
 class Core (width : Int) extends Module {
     val io = IO(new Bundle {
-        val imem = new RomIO(width)
-        val dmem = new RamIO(width)
+        // val imem = new RomIO(width)
+        // val dmem = new RamIO(width)
+        val imem = new Master_AXI4Lite(width)
+        val dmem = new Master_AXI4Lite(width)
         val break = Output(Bool())
     })
 
     val fetch = Module(new InstFetch(width))
-    fetch.io.imem <> io.imem
+    io.imem <> fetch.io.imem
 
     val decode = Module(new Decode(width))
     decode.io.inst := fetch.io.inst
@@ -36,18 +38,11 @@ class Core (width : Int) extends Module {
     execution.io.in2 := MuxLookup(decode.io.rs2_sel, 0.U) (Seq(B_XXX -> (0.U), B_IMM -> (decode.io.imm), B_REG -> (rf.io.rs2_data)))
 
     // Access Memory
-    io.dmem.ren := (decode.io.ld_sel =/= LD_XXX)
-    io.dmem.raddr := execution.io.calc_out
-    val rdata = io.dmem.rdata
-    val ld_data = MuxLookup(decode.io.ld_sel, 0.U) (
-        Seq (
-            LD_LB  -> (Cat(Fill(24, rdata(7)), rdata(7, 0))),
-            LD_LH  -> (Cat(Fill(16, rdata(15)), rdata(15, 0))),
-            LD_LW  -> (rdata),
-            LD_LBU -> (Cat(Fill(24, 0.U), rdata(7, 0))),
-            LD_LHU -> (Cat(Fill(16, 0.U), rdata(15, 0)))
-        )
-    )
+    val loadStore = Module(new LoadStore(width))
+    io.dmem <> loadStore.io.axi
+    
+    loadStore.io.signals.ld_sel := decode.io.ld_sel
+    loadStore.io.signals.raddr := execution.io.calc_out
 
     fetch.io.comp_out := execution.io.comp_out
     fetch.io.calc_out := Mux(decode.io.pc_sel === PC_BR, decode.io.imm + fetch.io.pc, execution.io.calc_out)
@@ -55,7 +50,7 @@ class Core (width : Int) extends Module {
     rf.io.rd_data :=
         Mux(
             decode.io.ld_sel =/= LD_XXX,
-            ld_data,
+            loadStore.io.signals.rdata,
             Mux(
                 decode.io.pc_sel === PC_UC,
                 fetch.io.pc + 4.U,
@@ -67,14 +62,7 @@ class Core (width : Int) extends Module {
             )
         )
     
-    io.dmem.wen := (decode.io.wb_sel === WB_MEM)
-    io.dmem.waddr := execution.io.calc_out
-    io.dmem.wdata := rf.io.rs2_data
-    io.dmem.wmask := MuxLookup(decode.io.st_sel, 0.U) (
-        Seq(
-            ST_SB -> ("h000000ff".U),
-            ST_SH -> ("h0000ffff".U),
-            ST_SW -> ("hffffffff".U)
-        )
-    )
+    loadStore.io.signals.st_sel := decode.io.st_sel
+    loadStore.io.signals.waddr := execution.io.calc_out
+    loadStore.io.signals.wdata := rf.io.rs2_data
 }

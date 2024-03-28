@@ -1,4 +1,4 @@
-package memory
+package device.memory
 
 import chisel3._
 import chisel3.util._
@@ -19,7 +19,7 @@ class ram_2r1w (width : Int) extends BlackBox with HasBlackBoxResource {
         val dmem_rdata = Output(UInt(width.W))
         val dmem_wen   = Input(Bool())
         val dmem_waddr = Input(UInt(width.W))
-        val dmem_wmask = Input(UInt(width.W))
+        val dmem_wstrb = Input(UInt(width.W))
         val dmem_wdata = Input(UInt(width.W))
     })
 
@@ -46,6 +46,6 @@ class Ram_2r1w (width : Int) extends Module {
 
     ram.io.dmem_wen := io.dmem.wen
     ram.io.dmem_waddr := io.dmem.waddr
-    ram.io.dmem_wmask := io.dmem.wmask
+    ram.io.dmem_wstrb := io.dmem.wstrb
     ram.io.dmem_wdata := io.dmem.wdata
 }

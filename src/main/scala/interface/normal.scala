@@ -11,6 +11,6 @@ class RamIO (width : Int) extends RomIO (width) {
     val wen   = Output(Bool())
     val waddr = Output(UInt(width.W))
     val wdata = Output(UInt(width.W))
-    val wmask = Output(UInt(width.W))
+    val wstrb = Output(UInt(width.W))
 }
 

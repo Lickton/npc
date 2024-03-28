@@ -2,5 +2,6 @@
 /build
 /project
 /target
+/test_run_dir
 !.gitignore
 *.vcd
