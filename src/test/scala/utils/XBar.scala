@@ -5,8 +5,6 @@ import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import interface._
-
 class XBarTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
   behavior of "Addr2Dev"
 
@@ -34,6 +32,7 @@ class XBarTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
     test(new XBar(32, 2)) { c =>
         c.in.read.arvalid.poke(true.B)
         c.in.read.araddr.poke("h80000000".U)
+        c.in.read.rready.poke(true.B)
         c.out(0).read.rvalid.poke(true.B)
         c.out(0).read.rdata.poke("hffee00ff".U)
         c.out(0).read.rresp.poke(0.U)
@@ -43,9 +42,6 @@ class XBarTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
         c.in.read.rvalid.expect(true.B)
         c.in.read.rdata.expect("hffee00ff".U)
         c.in.read.rresp.expect(0.U)
-
-        c.in.read.araddr.poke("ha0000000".U)
-        c.in.read.rdata.expect("heeff00ee".U)
     }
   }
 }

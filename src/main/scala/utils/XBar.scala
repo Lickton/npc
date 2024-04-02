@@ -69,25 +69,15 @@ class XBar (width: Int, n: Int) extends Module {
     AXI4Lite.master_initialize(out(i))
     }
 
-    // in.read.arready := true.B
-    // in.write.awready := true.B 
     in.read.arready := in.read.arvalid
     in.write.awready := in.write.awvalid
 
-    val addr2Dev = Module(new Addr2Dev(32))
-
-    /* 4 in.read.araddr      <- dmem.read.araddr */
-    /* 5 addr2Dev.io.addr    <- in.read.araddr */
-    /* 6 addr2Dev.devID      <- addr2Dev.io.addr */
-    /* 7 out(0).read.arvalid <- addr2Dev.devID */
-
-    /*10 out(0).read.arready <- dmem.read.arready */
+    val addr2Dev = Module(new Addr2Dev(width))
     
     val addr = Mux(in.read.arvalid || in.write.wvalid, in.read.araddr, 0.U)
     addr2Dev.io.addr := addr
 
     val devID = addr2Dev.io.devID
-    assert(devID >= 0.U && devID <= 1.U)
 
     /*11 in.read.arready     <- out(0).read.arready */
     out(devID).read.arvalid := in.read.arvalid

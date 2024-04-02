@@ -74,7 +74,7 @@ src
 
 ### XBar Design
 
-Recive a address and decide which device will be transfered, only access to data memory (from load stroe unit) is recived.
+Recive a address and decide which device will be transfered to, only access to data memory (from load stroe unit) is recived.
 ```
 +--------+                     +--------+                     +--------+
 |        | ----- arvalid ----> |        | ----- arvalid ----> |        |
@@ -117,7 +117,7 @@ SUM:                                33            297            205           1
 -----------------------------------------------------------------------------------
 ```
 
-## Require
+## Requirement
 
 - sbt, scala build tool and scala
 - normal build utils (make, g++)
