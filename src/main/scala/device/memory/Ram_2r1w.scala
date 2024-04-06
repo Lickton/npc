@@ -26,26 +26,26 @@ class ram_2r1w (width : Int) extends BlackBox with HasBlackBoxResource {
     addResource("ram_2r1w.v")
 }
 
-class Ram_2r1w (width : Int) extends Module {
-    val io = IO(new Bundle {
-        val imem = Flipped(new RomIO(width))
-        val dmem = Flipped(new RamIO(width))
-    })
+// class Ram_2r1w (width : Int) extends Module {
+//     val io = IO(new Bundle {
+//         val imem = Flipped(new RomIO(width))
+//         val dmem = Flipped(new RamIO(width))
+//     })
     
-    val ram = Module(new ram_2r1w(width))
+//     val ram = Module(new ram_2r1w(width))
 
-    ram.io.clock := clock
+//     ram.io.clock := clock
 
-    ram.io.imem_ren := io.imem.ren
-    ram.io.imem_raddr := io.imem.raddr
-    io.imem.rdata := ram.io.imem_rdata
+//     ram.io.imem_ren := io.imem.ren
+//     ram.io.imem_raddr := io.imem.raddr
+//     io.imem.rdata := ram.io.imem_rdata
 
-    ram.io.dmem_ren := io.dmem.ren
-    ram.io.dmem_raddr := io.dmem.raddr
-    io.dmem.rdata := ram.io.dmem_rdata
+//     ram.io.dmem_ren := io.dmem.ren
+//     ram.io.dmem_raddr := io.dmem.raddr
+//     io.dmem.rdata := ram.io.dmem_rdata
 
-    ram.io.dmem_wen := io.dmem.wen
-    ram.io.dmem_waddr := io.dmem.waddr
-    ram.io.dmem_wstrb := io.dmem.wstrb
-    ram.io.dmem_wdata := io.dmem.wdata
-}
+//     ram.io.dmem_wen := io.dmem.wen
+//     ram.io.dmem_waddr := io.dmem.waddr
+//     ram.io.dmem_wstrb := io.dmem.wstrb
+//     ram.io.dmem_wdata := io.dmem.wdata
+// }
