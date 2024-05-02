@@ -19,9 +19,9 @@ class XBarTest extends AnyFlatSpec with ChiselScalatestTester with Matchers {
 
   it should "divide to Accelerator" in {
     test(new Addr2Dev(32)) { c =>
-      c.io.addr.poke("ha0000000".U)
+      c.io.addr.poke("h30000000".U)
       c.io.devID.expect("b01".U)
-      c.io.addr.poke("ha0000fff".U)
+      c.io.addr.poke("h30000fff".U)
       c.io.devID.expect("b01".U)
     }
   }

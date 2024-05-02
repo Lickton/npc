@@ -16,7 +16,8 @@ class Addr2Dev (width: Int) extends Module {
 
     val lut = List(
         ("h80000000".U, "h8000000".U, "b00".U), // SRAM
-        ("ha0000000".U, "h8000000".U, "b01".U), // CNN Accelerator
+        ("ha0000000".U, "h8000000".U, "b00".U), // Device in Simulation
+        ("h30000000".U, "h8000000".U, "b01".U), // CNN Accelerator
     )
 
     io.devID := "b00".U

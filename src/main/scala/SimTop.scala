@@ -16,7 +16,7 @@ class SimTop extends Module {
     })
 
     val core = Module(new Core(32))
-    val cnn_core = Module(new CNNCore(32))
+    val cnn = Module(new CNNCore(8, 3, 16))
     io.break := core.io.break
 
     // val mem = Module(new Ram_2r1w(32))
@@ -29,7 +29,10 @@ class SimTop extends Module {
     // AXI4Lite.conncet(core.io.dmem, mem.io.dmem)
     AXI4Lite.conncet(core.io.dmem, xbar.in)
     AXI4Lite.conncet(xbar.out(0), mem.io.dmem)
-    AXI4Lite.conncet(xbar.out(1), cnn_core.io)
+    AXI4Lite.conncet(xbar.out(1), cnn.io.axi)
+
+    cnn.io.read <> mem.io.dma_read
+    cnn.io.write <> mem.io.dma_write
 
     io.pc := mem.io.imem.read.araddr
     io.inst := mem.io.imem.read.rdata

@@ -11,6 +11,8 @@ class AXI_2r1w (width: Int) extends Module {
     val io = IO(new Bundle {
         val imem = new Slave_AXI4Lite(width)
         val dmem = new Slave_AXI4Lite(width)
+        val dma_read = Flipped(new DMA(8, 9))
+        val dma_write = Flipped(new DMA(8, 16))
     })
     
     val ram = Module(new ram_2r1w(width))
@@ -30,10 +32,7 @@ class AXI_2r1w (width: Int) extends Module {
     /*****************/
     /*** AXI-Lite ****/
     /*****************/
-    // Instruction Memory
     AXI4Lite.slave_initialize(imem)
-
-    // Data Memory
     AXI4Lite.slave_initialize(dmem)
 
     when (imem.read.arvalid) {
@@ -46,8 +45,6 @@ class AXI_2r1w (width: Int) extends Module {
         imem.read.rresp := Mux(imem.read.rready, RESP.OKAY, 0.U)
     }
 
-    /* 8 dmem.read.arvalid           <- xbar.io.out(0).read.arvalid */
-    /* 9 dmem.read.arready           <- dmem.read.arvalid */
     when (dmem.read.arvalid) {
         ram.io.dmem_ren := dmem.read.araddr =/= 0.U
         dmem.read.arready := true.B
@@ -70,4 +67,21 @@ class AXI_2r1w (width: Int) extends Module {
         dmem.write.bvalid := true.B
         dmem.write.bresp := Mux(dmem.write.bready, RESP.OKAY, 0.U)
     }
+
+    /*****************/
+    /****** DMA ******/
+    /*****************/
+    val read = io.dma_read
+    read.ar.ready := true.B
+    read.rd.valid := false.B
+    read.rd.bits := VecInit(Seq.fill(9)(0.U))
+    read.aw.ready := false.B
+    read.wd.ready := false.B
+
+    val write = io.dma_write
+    write.ar.ready := true.B
+    write.rd.valid := false.B
+    write.rd.bits := VecInit(Seq.fill(16)(0.U))
+    write.aw.ready := false.B
+    write.wd.ready := false.B
 }

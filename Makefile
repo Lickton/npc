@@ -23,7 +23,7 @@ lib: $(LIB_OBJ)
 	verilator $(VSRC) $(VERILATOR_FLAGS)
 	ar rsc $(LIB_STATIC) $(LIB_OBJ)
 
-build/object/%.o: /usr/share/verilator/include/%.cpp
+build/object/%.o: /home/lickton/Public/arch/verilator/include/%.cpp
 	@$(info Target: $@)
 	$(CXX) -c $< -o $@ $(CFLAGS)
 
