@@ -11,8 +11,8 @@ class AXI_2r1w (width: Int) extends Module {
     val io = IO(new Bundle {
         val imem = new Slave_AXI4Lite(width)
         val dmem = new Slave_AXI4Lite(width)
-        val dma_read = Flipped(new DMA(8, 9))
-        val dma_write = Flipped(new DMA(8, 16))
+        val dma_read = Flipped(new DMARead(8, 9))
+        val dma_write = Flipped(new DMAWrite(8, 16))
     })
     
     val ram = Module(new ram_2r1w(width))
@@ -72,16 +72,34 @@ class AXI_2r1w (width: Int) extends Module {
     /****** DMA ******/
     /*****************/
     val read = io.dma_read
+    val write = io.dma_write
+    val addr = RegInit(0.U(32.W))
+
     read.ar.ready := true.B
     read.rd.valid := false.B
-    read.rd.bits := VecInit(Seq.fill(9)(0.U))
-    read.aw.ready := false.B
-    read.wd.ready := false.B
+    read.rd.bits := 0.U
+    when (read.ar.valid) {
+        val count = RegInit(0.U(4.W))
+        addr := read.ar.bits
+        ram.io.dmem_ren := true.B
+        when (count < 9.U) {
+            ram.io.dmem_raddr := addr + count
+            read.rd.bits := ram.io.dmem_rdata
+            count := count + 1.U
+        }
+    }
 
-    val write = io.dma_write
-    write.ar.ready := true.B
-    write.rd.valid := false.B
-    write.rd.bits := VecInit(Seq.fill(16)(0.U))
-    write.aw.ready := false.B
-    write.wd.ready := false.B
+    write.aw.ready := true.B
+    write.wd.ready := true.B
+    when (write.aw.valid) {
+        val count = RegInit(0.U(4.W))
+        addr := write.aw.bits
+        ram.io.dmem_wen := true.B
+        when (count < 16.U) {
+            ram.io.dmem_waddr := addr + count
+            ram.io.dmem_wstrb := "b0001".U
+            ram.io.dmem_wdata := write.wd.bits
+            count := count + 1.U
+        }
+    }
 }

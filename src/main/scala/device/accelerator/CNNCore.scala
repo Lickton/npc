@@ -33,7 +33,7 @@ class CNNCore (xlen: Int, kernel: Int, size: Int) extends Module {
 
     val start = RegInit(0.U(32.W))
     val len = RegInit(0.U(32.W))
-    val select = RegInit(0.U(32.W))
+    val select = RegInit(0.U(4.W))
     val reluEn = RegInit(false.B)
 
     when (io.axi.write.awvalid && io.axi.write.wvalid) {
@@ -41,10 +41,10 @@ class CNNCore (xlen: Int, kernel: Int, size: Int) extends Module {
         io.axi.write.wready := true.B
         val data = io.axi.write.wdata
         val addr = io.axi.write.awaddr
-        start := Mux(addr === "h3000_0000".U, data, 0.U)
-        len := Mux(addr === "h3000_0004".U, data, 0.U)
+        start := Mux(addr === "h3000_0000".U, data, start)
+        len := Mux(addr === "h3000_0004".U, data, len)
         select := Mux(addr === "h3000_0008".U, data, 0.U)
-        reluEn := Mux(addr === "h3000_000c".U, data(0).asBool, false.B)
+        reluEn := Mux(addr === "h3000_000c".U, data(0).asBool, reluEn)
     }
 
 	fetcher.io.read <> io.read

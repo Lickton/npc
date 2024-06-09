@@ -18,7 +18,7 @@
 #define FBCTL_ADDR      (MMIO_BASE   + 0x1100000)
 
 /*----- Trace config -----*/
-// #define VCD_TRACE
+#define VCD_TRACE
 // #define INST_TRACE
 // #define RMEM_TRACE
 // #define WMEM_TRACE

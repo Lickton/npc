@@ -75,12 +75,11 @@ class XBar (width: Int, n: Int) extends Module {
 
     val addr2Dev = Module(new Addr2Dev(width))
     
-    val addr = Mux(in.read.arvalid || in.write.wvalid, in.read.araddr, 0.U)
+    val addr = Mux(in.read.arvalid, in.read.araddr, Mux(in.write.awvalid, in.write.awaddr, 0.U))
     addr2Dev.io.addr := addr
 
     val devID = addr2Dev.io.devID
 
-    /*11 in.read.arready     <- out(0).read.arready */
     out(devID).read.arvalid := in.read.arvalid
     out(devID).read.araddr := Mux(out(devID).read.arready, in.read.araddr, 0.U)
 
